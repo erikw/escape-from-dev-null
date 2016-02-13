@@ -31,3 +31,29 @@ def left():
 
 def left_up():
     return move("lup")
+
+def move_to(begin, end):
+
+    distance_x = begin['x'] - end['x']
+    if distance_x < 0:
+        direction_x = 'r'
+    else:
+        direction_x = 'l'
+
+    for i in range(abs(distance_x)):
+        res = move(direction_x)
+        if res['status'] != 'SUCCESS':
+            return res
+
+    distance_y = begin['y'] - end['y']
+    if distance_y < 0:
+        direction_y = 'down'
+    else:
+        direction_y = 'up'
+
+    for i in range(abs(distance_y)):
+        res = move(direction_y)
+        if res['status'] != 'SUCCESS':
+            return res
+
+    return res

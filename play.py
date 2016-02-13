@@ -58,7 +58,7 @@ def command(cmd):
         if len(cmd_rest) < 1:
             print("Missing thing to drop")
         else:
-            thingid = parts[1]
+            thingid = cmd_rest[0]
             resp = actions.drop(thingid)
     elif action == "reset":
         actions.reset()

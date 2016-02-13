@@ -11,3 +11,9 @@ def get_inventory(scan):
 
 def get_nearby_things(scan):
     return scan['payload']['scanthings']
+
+def get_position(scan):
+    return {
+             'x': scan['payload']['x'],
+             'y': scan['payload']['y']
+           }
