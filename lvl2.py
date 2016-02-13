@@ -15,8 +15,21 @@ def main():
     for inv in orig_inventory:
         actions.drop(inv)
 
-    pos = scan.get_position(env)
+    # things = get_nearby_things(env)
+    # smallest_x = None
+    # smallest_y = None
+    # for thing in things:
+        # x = thing['x']
+        # x = thing['y']
+        # if smallest_x is None or x < smallest_x:
+            # smallest_x = x
+            # smallest_y = y
+
+    # dest = {'x': smallest_x, 'y' : smallest_y}
+
     dest = {'x': 1, 'y': 5}
+
+    pos = scan.get_position(env)
     move_to(pos, dest)
 
     all_things = {}
