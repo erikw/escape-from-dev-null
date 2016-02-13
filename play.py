@@ -61,7 +61,7 @@ def command(cmd):
             thingid = cmd_rest[0]
             resp = actions.drop(thingid)
     elif action == "reset":
-        actions.reset()
+        resp = actions.reset()
     elif action == "scan":
         resp = scan.scan()
         if len(cmd_rest) >= 1:

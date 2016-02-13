@@ -35,10 +35,10 @@ def main():
     all_things = {}
 
     env = scan.scan()
-    things = get_nearby_things(env)
+    things = scan.get_nearby_things(env)
     while things:
         env = scan.scan()
-        things = get_nearby_things(env)
+        things = scan.get_nearby_things(env)
         for thing in things:
             all_things[thing['id']] = thing
 
@@ -52,7 +52,7 @@ def main():
     sorted_things = sorted(all_things.itervalues(), key=lambda x: x['name'])
     left()
     for thing in sorted_things:
-        drop[thing['id']]
+        actions.drop[thing['id']]
         left()
 
 if __name__ == '__main__':
