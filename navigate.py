@@ -9,18 +9,6 @@ from tokens import *
 
 last_cmd = None
 
-def byteify(input):
-    if isinstance(input, dict):
-        return {byteify(key): byteify(value)
-                for key, value in input.iteritems()}
-    elif isinstance(input, list):
-        return [byteify(element) for element in input]
-    elif isinstance(input, unicode):
-        return input.encode('utf-8')
-    else:
-        return input
-
-
 def command(cmd):
     """Send a command to the server.
 
@@ -32,8 +20,6 @@ def command(cmd):
 
     """
     args = {}
-    args['entityid'] = ENTITY_ID
-    args['sessionId'] = SESSION_ID
 
     cmd_splitted = cmd.split()
     action = cmd_splitted[0]
@@ -101,15 +87,13 @@ def command(cmd):
 
 
     resp = post(args)
-    resp_json = json.load(resp)
-    resp_json = byteify(resp_json)
     if print_key:
-        if print_key in resp_json['payload']:
-            pprint(resp_json['payload'][print_key])
+        if print_key in resp:
+            pprint(resp[print_key])
         else:
             print("Selected key %s does not exists" % print_key)
     else:
-        pprint(resp_json)
+        pprint(resp)
     return 0
 
 
