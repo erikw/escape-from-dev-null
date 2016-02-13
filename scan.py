@@ -1,12 +1,8 @@
 #!/usr/bin/env python2
-
-import json
-import urllib2
 from post import *
-import sys
-from pprint import pprint
 
-def scan(args):
+def scan():
+    args = {}
     args["target"] = "scan"
     return post(args)
 
