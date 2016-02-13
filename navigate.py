@@ -3,27 +3,23 @@
 import sys
 import json
 from post import *
+from pprint import pprint
 
 SESSION_ID = '4ef7f78a-c305-471d-b139-6a1b9ddd4c7e'
 ENTITY_ID = 'd4941687-ba87-4d67-9dfc-be00c67a0b36'
 
 last_cmd = None
 
-def scan_maze():
-    """Scan the current location.
-
-    .. Returns:
-    :returns: Whatever the API returns.
-
-    """
-    args = dict()
-    args["sessionid"] = SESSION_ID
-    args["entityid"] = ENTITY_ID
-    args["target"] = "scan"
-    resp = post(args)
-    for line in resp:
-        print line
-    return 0
+def byteify(input):
+    if isinstance(input, dict):
+        return {byteify(key): byteify(value)
+                for key, value in input.iteritems()}
+    elif isinstance(input, list):
+        return [byteify(element) for element in input]
+    elif isinstance(input, unicode):
+        return input.encode('utf-8')
+    else:
+        return input
 
 
 def command(cmd):
@@ -40,7 +36,12 @@ def command(cmd):
     args['entityid'] = ENTITY_ID
     args['sessionId'] = SESSION_ID
 
-    action = cmd.split()[0]
+    cmd_splitted = cmd.split()
+    action = cmd_splitted[0]
+    cmd_rest = cmd_splitted[1:]
+
+
+    print_key = None
 
 ################ Movement begin ############
     if action == "w":
@@ -90,13 +91,26 @@ def command(cmd):
     elif action == "reset":
         print("Reset")
         args['target']  = 'reset'
+    elif action == "scan":
+        print("Scan")
+        args["target"] = "scan"
+        if len(cmd_rest) >= 1:
+            print_key = cmd_rest[0]
     else:
         print("Wrong command")
         return 1
 
 
-    post(args)
-    scan_maze()
+    resp = post(args)
+    resp_json = json.load(resp)
+    resp_json = byteify(resp_json)
+    if print_key:
+        if print_key in resp_json['payload']:
+            pprint(resp_json['payload'][print_key])
+        else:
+            print("Selected key %s does not exists" % print_key)
+    else:
+        pprint(resp_json)
     return 0
 
 
