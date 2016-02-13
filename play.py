@@ -2,6 +2,10 @@
 
 import sys
 import json
+import actions
+import navigate
+import scan
+
 from post import *
 from pprint import pprint
 from tokens import *
@@ -19,6 +23,7 @@ def command(cmd):
     :type: cmd: A string.
 
     """
+    resp = None
     args = {}
 
     cmd_splitted = cmd.split()
@@ -28,66 +33,48 @@ def command(cmd):
 
     print_key = None
 
-################ Movement begin ############
+
+################ navigatement begin ############
     if action == "w":
-        print("Moved up")
-        args['target']  = 'move'
-        args['direction']  = 'up'
+        resp = navigate.up()
     elif action == "e":
-        print("Moved right up")
-        args['target']  = 'move'
-        args['direction']  = 'rup'
+        resp = navigate.right_up()
     elif action == "a":
-        print("Moved left")
-        args['target']  = 'move'
-        args['direction']  = 'l'
+        resp = navigate.left()
     elif action == "s":
-        print("Moved down")
-        args['target']  = 'move'
-        args['direction']  = 'down'
+        resp = navigate.down()
     elif action == "d":
-        print("Moved right")
-        args['target']  = 'move'
-        args['direction']  = 'r'
+        resp = navigate.right()
     elif action == "q":
-        print("Moved left up")
-        args['target']  = 'move'
-        args['direction']  = 'lup'
+        resp = navigate.left_up()
     elif action == "z":
-        print("Moved left down")
-        args['target']  = 'move'
-        args['direction']  = 'ldown'
+        resp = navigate.left_down()
     elif action == "c":
-        print("Moved right down")
-        args['target']  = 'move'
-        args['direction']  = 'rdown'
-################ Movement end ############
-    elif action == "p":
-        print("Pickup")
-        args['target']  = 'pickup'
+        resp = navigate.right_down()
+################ navigatement end ############
+    elif action == "p" or action == "pickup":
+        resp = actions.pickup()
     elif action == "l" or action == "drop":
-        print("Drop")
-        parts = cmd.split()
-        if not parts[1]:
+        if len(cmd_rest) < 1:
             print("Missing thing to drop")
         else:
-            args['target']  = 'drop'
-            args['thingid'] = parts[1]
+            thingid = parts[1]
+            resp = actions.drop(thingid)
     elif action == "reset":
-        print("Reset")
-        args['target']  = 'reset'
+        actions.reset()
     elif action == "scan":
-        print("Scan")
-        args["target"] = "scan"
+        resp = scan.scan()
         if len(cmd_rest) >= 1:
             print_key = cmd_rest[0]
     else:
-        print("Wrong command")
+        print("Unknown command")
+
+    if resp is None:
+        print("Error with command.")
         return 1
 
-
-    resp = post(args)['payload']
     if print_key:
+        resp = resp['payload']
         if print_key in resp:
             pprint(resp[print_key])
         else:
@@ -97,13 +84,14 @@ def command(cmd):
     return 0
 
 
+
 def main():
     """Navigate the maze."""
     try:
         while True:
             cmd = sys.stdin.readline()
             cmd = cmd.strip()
-            if not cmd:
+            if not cmd and last_cmd:
                 cmd = last_cmd
             last_cmd = cmd
             command(cmd)

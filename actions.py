@@ -15,3 +15,9 @@ def drop(inv_id):
     args["target"] = "drop"
     args["thingid"] = inv_id
     return post(args)
+
+def reset():
+    """Reset level"""
+    args = dict()
+    args["target"] = "reset"
+    return post(args)
