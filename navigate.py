@@ -5,7 +5,7 @@ def move(direction):
     args['target']  = 'move'
     args['direction']  = direction
 
-    resp = post(args)
+    resp = post(args)['payload']
 
 
 def up():

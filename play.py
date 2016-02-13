@@ -86,7 +86,7 @@ def command(cmd):
         return 1
 
 
-    resp = post(args)
+    resp = post(args)['payload']
     if print_key:
         if print_key in resp:
             pprint(resp[print_key])

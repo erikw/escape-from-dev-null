@@ -7,7 +7,7 @@ def scan():
     return post(args)
 
 def get_inventory(scan):
-    return scan['inventory']
+    return scan['payload']['inventory']
 
 def get_nearby_things(scan):
-    return scan['scanthings']
+    return scan['payload']['scanthings']

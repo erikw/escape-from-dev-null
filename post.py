@@ -31,4 +31,4 @@ def post(args):
     if resp.getcode() != 200:
         print("HTTP error {:d}".format(resp.getcode()))
 
-    return byteify(json.load(resp))['payload']
+    return byteify(json.load(resp))
