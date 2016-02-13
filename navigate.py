@@ -7,7 +7,7 @@ ENTITY_ID = 'd4941687-ba87-4d67-9dfc-be00c67a0b36'
 
 last_cmd = None
 
-def navigate_maze(cmd):
+def command(cmd):
     """Send a command to the server.
 
     .. Keyword Arguments:
@@ -19,35 +19,53 @@ def navigate_maze(cmd):
     """
     args = {}
     args['entityid'] = ENTITY_ID
-    args['target']  = 'move'
 
+################ Movement begin ############
     if cmd.startswith("w"):
         print("Moved up")
+        args['target']  = 'move'
         args['direction']  = 'up'
     elif cmd.startswith("e"):
         print("Moved right up")
+        args['target']  = 'move'
         args['direction']  = 'rup'
     elif cmd.startswith("a"):
         print("Moved left")
+        args['target']  = 'move'
         args['direction']  = 'l'
     elif cmd.startswith("s"):
         print("Moved down")
+        args['target']  = 'move'
         args['direction']  = 'down'
     elif cmd.startswith("d"):
         print("Moved right")
+        args['target']  = 'move'
         args['direction']  = 'r'
     elif cmd.startswith("q"):
         print("Moved left up")
+        args['target']  = 'move'
         args['direction']  = 'lup'
     elif cmd.startswith("z"):
         print("Moved left down")
+        args['target']  = 'move'
         args['direction']  = 'ldown'
     elif cmd.startswith("c"):
         print("Moved right down")
+        args['target']  = 'move'
         args['direction']  = 'rdown'
+################ Movement end ############
+    elif cmd.startswith("p"):
+        print("Pickup")
+        args['target']  = 'pickup'
+    elif cmd.startswith("l"):
+        print("Drop")
+        args['target']  = 'drop'
+    elif cmd.startswith("i"):
+        print("Reset")
+        args['target']  = 'reset'
     else:
-        print("wrong command")
-        return
+        print("Wrong command")
+        return 1
 
 
     post(args)
@@ -63,7 +81,7 @@ def main():
             if not cmd:
                 cmd = last_cmd
             last_cmd = cmd
-            navigate_maze(cmd)
+            command(cmd)
 
     except (KeyboardInterrupt, SystemExit):
         pass

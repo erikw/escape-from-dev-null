@@ -28,7 +28,7 @@ def post(args):
     # req.add_header('Content-Type', 'application/json')
     resp = urllib2.urlopen(req, None)
 
-    # print(resp.getcode())
-
+    if resp.getcode() != 200:
+        print("HTTP error {:d}".format(resp.getcode()))
 
     return resp
