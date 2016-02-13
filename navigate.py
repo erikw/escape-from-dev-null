@@ -4,6 +4,7 @@ import sys
 import json
 from post import *
 
+SESSION_ID = '4ef7f78a-c305-471d-b139-6a1b9ddd4c7e'
 ENTITY_ID = 'd4941687-ba87-4d67-9dfc-be00c67a0b36'
 
 last_cmd = None
@@ -37,48 +38,56 @@ def command(cmd):
     """
     args = {}
     args['entityid'] = ENTITY_ID
+    args['sessionId'] = SESSION_ID
+
+    action = cmd.split()[0]
 
 ################ Movement begin ############
-    if cmd.startswith("w"):
+    if action == "w":
         print("Moved up")
         args['target']  = 'move'
         args['direction']  = 'up'
-    elif cmd.startswith("e"):
+    elif action == "e":
         print("Moved right up")
         args['target']  = 'move'
         args['direction']  = 'rup'
-    elif cmd.startswith("a"):
+    elif action == "a":
         print("Moved left")
         args['target']  = 'move'
         args['direction']  = 'l'
-    elif cmd.startswith("s"):
+    elif action == "s":
         print("Moved down")
         args['target']  = 'move'
         args['direction']  = 'down'
-    elif cmd.startswith("d"):
+    elif action == "d":
         print("Moved right")
         args['target']  = 'move'
         args['direction']  = 'r'
-    elif cmd.startswith("q"):
+    elif action == "q":
         print("Moved left up")
         args['target']  = 'move'
         args['direction']  = 'lup'
-    elif cmd.startswith("z"):
+    elif action == "z":
         print("Moved left down")
         args['target']  = 'move'
         args['direction']  = 'ldown'
-    elif cmd.startswith("c"):
+    elif action == "c":
         print("Moved right down")
         args['target']  = 'move'
         args['direction']  = 'rdown'
 ################ Movement end ############
-    elif cmd.startswith("p"):
+    elif action == "p":
         print("Pickup")
         args['target']  = 'pickup'
-    elif cmd.startswith("l"):
+    elif action == "l" or action == "drop":
         print("Drop")
-        args['target']  = 'drop'
-    elif cmd.startswith("i"):
+        parts = cmd.split()
+        if not parts[1]:
+            print("Missing thing to drop")
+        else:
+            args['target']  = 'drop'
+            args['thingid'] = parts[1]
+    elif action == "reset":
         print("Reset")
         args['target']  = 'reset'
     else:
